@@ -1,0 +1,76 @@
+:root {
+  /* Blueprint-on-paper — cool draft tint with warm paper undertone */
+  --bg: #e9f0f6;
+  --bg-warm: #f0ebe4;
+  --bg-blueprint: #d4e4f2;
+  --bg-grid-major: rgba(58, 110, 165, 0.16);
+  --bg-grid-minor: rgba(58, 110, 165, 0.08);
+  --bg-grid-accent: rgba(58, 110, 165, 0.22);
+  --bg-vignette: rgba(58, 90, 120, 0.1);
+
+  --surface: #faf8f5;
+  --surface-elevated: color-mix(in srgb, var(--surface) 96%, white);
+  --surface-soft: #f3f0eb;
+  --border: #d4dce4;
+  --border-soft: #e2e8ef;
+  --text: #2f3a42;
+  --muted: #56636d;
+
+  --stay: #81c995;
+  --stay-soft: #eef7f1;
+  --stay-text: #137333;
+
+  --plan: #8ab4f8;
+  --plan-soft: #e8f0fe;
+  --plan-text: #1a73e8;
+
+  --move: #e8938a;
+  --move-soft: #fce8e6;
+  --move-text: #b3261e;
+
+  --success: var(--stay);
+  --success-soft: var(--stay-soft);
+  --success-text: var(--stay-text);
+  --coral: var(--move);
+  --coral-soft: var(--move-soft);
+  --coral-text: var(--move-text);
+  --danger: var(--move);
+  --danger-soft: var(--move-soft);
+  --danger-text: var(--move-text);
+
+  --sans: "Google Sans", "Google Sans Text", system-ui, -apple-system, sans-serif;
+
+  --accent-flow-1: #669df6;
+  --accent-flow-2: #7b9eb8;
+  --accent-flow-3: #c48b9f;
+  --accent: var(--accent-flow-1);
+
+  --text-sm: 14px;
+  --text-base: 17px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 28px;
+  --text-display: clamp(32px, 7vw, 40px);
+  --text-question: clamp(26px, 5.5vw, 32px);
+
+  --radius-pill: 9999px;
+  --radius-card: 28px;
+  --radius-panel: 24px;
+  --radius-sm: 20px;
+  --radius: var(--radius-card);
+
+  --content-max: 520px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --shadow-soft: 0 1px 4px rgba(40, 60, 80, 0.08), 0 8px 24px rgba(40, 60, 80, 0.07);
+  --tap-min: 58px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --content-max: 580px;
+    --text-base: 18px;
+    --text-lg: 22px;
+    --text-xl: 26px;
+    --text-2xl: 30px;
+  }
+}

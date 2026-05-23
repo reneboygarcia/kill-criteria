@@ -1,0 +1,140 @@
+/*
+ * Blueprint drafting sheet — stronger grid, cool plan tint, registration marks.
+ * Feels like spread drawings on a site table; cards stay readable on top.
+ */
+
+body {
+  background-color: var(--bg-blueprint);
+  background-image:
+    /* blueprint wash from top */
+    radial-gradient(
+      ellipse 130% 80% at 50% -20%,
+      color-mix(in srgb, var(--accent-flow-1) 22%, transparent),
+      transparent 58%
+    ),
+    /* warm paper bleed bottom-left — human, not CAD-cold */
+    radial-gradient(
+      ellipse 90% 60% at 0% 100%,
+      color-mix(in srgb, var(--bg-warm) 55%, transparent),
+      transparent 65%
+    ),
+    /* cool depth bottom-right */
+    radial-gradient(
+      ellipse 70% 50% at 100% 100%,
+      var(--bg-vignette),
+      transparent 62%
+    ),
+    /* major grid — 40px bays */
+    linear-gradient(var(--bg-grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid-major) 1px, transparent 1px),
+    /* minor grid — 8px subdivisions */
+    linear-gradient(var(--bg-grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid-minor) 1px, transparent 1px),
+    /* base blueprint paper gradient */
+    linear-gradient(
+      168deg,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg-blueprint) 80%, var(--bg)) 40%,
+      color-mix(in srgb, var(--bg-warm) 25%, var(--bg)) 100%
+    );
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    40px 40px,
+    40px 40px,
+    8px 8px,
+    8px 8px,
+    100% 100%;
+  background-attachment: scroll;
+}
+
+/* Registration ticks — all four sheet corners */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent));
+  background-size:
+    32px 1.5px,
+    1.5px 32px,
+    32px 1.5px,
+    1.5px 32px,
+    32px 1.5px,
+    1.5px 32px,
+    32px 1.5px,
+    1.5px 32px;
+  background-position:
+    14px 14px,
+    14px 14px,
+    calc(100% - 14px) 14px,
+    calc(100% - 14px) 14px,
+    14px calc(100% - 14px),
+    14px calc(100% - 14px),
+    calc(100% - 14px) calc(100% - 14px),
+    calc(100% - 14px) calc(100% - 14px);
+  background-repeat: no-repeat;
+}
+
+/* Structural crosshair + faint title-block frame (bottom-right) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.075;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M0 50h100M50 0v100' stroke='%233a6ea5' stroke-width='0.6'/%3E%3Ccircle cx='50' cy='50' r='16' fill='none' stroke='%233a6ea5' stroke-width='0.5'/%3E%3Cpath d='M46 50h8M50 46v8' stroke='%233a6ea5' stroke-width='0.4'/%3E%3C/svg%3E"),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent)),
+    linear-gradient(var(--bg-grid-accent), var(--bg-grid-accent));
+  background-size:
+    100px 100px,
+    72px 1px,
+    1px 48px,
+    72px 1px,
+    1px 48px;
+  background-position:
+    0 0,
+    calc(100% - 20px) calc(100% - 68px),
+    calc(100% - 20px) calc(100% - 68px),
+    calc(100% - 20px) calc(100% - 20px),
+    calc(100% - 92px) calc(100% - 20px);
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    opacity: 0.04;
+    background-image: none;
+    background-color: transparent;
+  }
+
+  body::before {
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 480px) {
+  body::after {
+    opacity: 0.05;
+  }
+}
