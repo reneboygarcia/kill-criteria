@@ -8,18 +8,13 @@ import { PathTrail } from "../components/PathTrail";
 import { QuestionCard } from "../components/QuestionCard";
 import { StepTransition } from "../components/StepTransition";
 import { getMaxDepth } from "../data/flows";
+import { isValidFlowId } from "../data/flowMeta";
 import type { FlowId } from "../data/types";
 import { buildResultSummary, useFlowState } from "../hooks/useFlowState";
 import styles from "./Flow.module.css";
 
-const validFlowIds = new Set<string>([
-  "quit-job",
-  "change-employer",
-  "leave-profession",
-]);
-
 function isFlowId(id: string): id is FlowId {
-  return validFlowIds.has(id);
+  return isValidFlowId(id);
 }
 
 export function Flow() {

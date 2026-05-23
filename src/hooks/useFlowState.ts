@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { getFlow } from "../data/flows";
+import { useCallback, useEffect, useState } from "react";
+import { loadFlow } from "../data/flows";
 import type {
   FlowDefinition,
   FlowId,
@@ -10,27 +10,54 @@ import {
   clearStoredSession,
   loadStoredSession,
   saveStoredSession,
+  validateFlowSession,
 } from "../lib/flowSession";
 
 export function useFlowState(flowId: FlowId) {
-  const flow = useMemo(() => getFlow(flowId), [flowId]);
-  const [currentNodeId, setCurrentNodeId] = useState<string>(
-    flow?.startNodeId ?? "",
-  );
+  const [flow, setFlow] = useState<FlowDefinition | undefined>();
+  const [currentNodeId, setCurrentNodeId] = useState("");
   const [path, setPath] = useState<PathStep[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const saved = loadStoredSession();
-    if (saved?.flowId === flowId) {
-      setCurrentNodeId(saved.currentNodeId);
-      setPath(saved.path);
-    } else if (flow) {
-      setCurrentNodeId(flow.startNodeId);
-      setPath([]);
-    }
-    setHydrated(true);
-  }, [flowId, flow]);
+    let cancelled = false;
+
+    setHydrated(false);
+    setFlow(undefined);
+
+    void loadFlow(flowId).then((loadedFlow) => {
+      if (cancelled) return;
+
+      if (!loadedFlow) {
+        setHydrated(true);
+        return;
+      }
+
+      setFlow(loadedFlow);
+
+      const saved = loadStoredSession();
+      if (saved?.flowId === flowId) {
+        const validated = validateFlowSession(saved, loadedFlow);
+        if (validated) {
+          setCurrentNodeId(validated.currentNodeId);
+          setPath(validated.path);
+        } else {
+          clearStoredSession();
+          setCurrentNodeId(loadedFlow.startNodeId);
+          setPath([]);
+        }
+      } else {
+        setCurrentNodeId(loadedFlow.startNodeId);
+        setPath([]);
+      }
+
+      setHydrated(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [flowId]);
 
   useEffect(() => {
     if (!hydrated || !flow) return;

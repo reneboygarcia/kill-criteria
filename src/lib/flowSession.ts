@@ -1,19 +1,12 @@
-import { flows, getFlow } from "../data/flows";
+import { isValidFlowId } from "../data/flowMeta";
 import type {
   FlowDefinition,
-  FlowId,
   FlowSession,
   PathStep,
 } from "../data/types";
 import { isQuestionNode } from "../data/types";
 
 export const STORAGE_KEY = "kill-criteria-session";
-
-const validFlowIds = new Set<string>(Object.keys(flows));
-
-function isFlowId(id: string): id is FlowId {
-  return validFlowIds.has(id);
-}
 
 function validatePathStep(
   step: PathStep,
@@ -40,11 +33,12 @@ function validatePathStep(
   return null;
 }
 
-export function validateFlowSession(session: FlowSession): FlowSession | null {
-  if (!isFlowId(session.flowId)) return null;
-
-  const flow = getFlow(session.flowId);
-  if (!flow) return null;
+export function validateFlowSession(
+  session: FlowSession,
+  flow: FlowDefinition,
+): FlowSession | null {
+  if (!isValidFlowId(session.flowId)) return null;
+  if (session.flowId !== flow.id) return null;
   if (!flow.nodes[session.currentNodeId]) return null;
 
   const path: PathStep[] = [];
@@ -70,19 +64,14 @@ export function loadStoredSession(): FlowSession | null {
     if (
       !parsed.flowId ||
       !parsed.currentNodeId ||
-      !Array.isArray(parsed.path)
+      !Array.isArray(parsed.path) ||
+      !isValidFlowId(parsed.flowId)
     ) {
       clearStoredSession();
       return null;
     }
 
-    const validated = validateFlowSession(parsed);
-    if (!validated) {
-      clearStoredSession();
-      return null;
-    }
-
-    return validated;
+    return parsed;
   } catch {
     clearStoredSession();
     return null;

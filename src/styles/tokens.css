@@ -37,7 +37,7 @@
   --danger-soft: var(--move-soft);
   --danger-text: var(--move-text);
 
-  --sans: "Google Sans", "Google Sans Text", system-ui, -apple-system, sans-serif;
+  --sans: "Google Sans", "Google Sans Fallback", system-ui, -apple-system, sans-serif;
 
   --accent-flow-1: #669df6;
   --accent-flow-2: #7b9eb8;

@@ -29,9 +29,12 @@ export const SECURITY_HEADERS: readonly HeaderEntry[] = [
   },
 ] as const;
 
-export const FONT_CACHE_HEADERS: readonly HeaderEntry[] = [
+export const IMMUTABLE_CACHE_HEADERS: readonly HeaderEntry[] = [
   {
     key: "Cache-Control",
     value: "public, max-age=31536000, immutable",
   },
 ] as const;
+
+/** @deprecated Use IMMUTABLE_CACHE_HEADERS */
+export const FONT_CACHE_HEADERS = IMMUTABLE_CACHE_HEADERS;

@@ -1,4 +1,5 @@
 import type { FlowSession } from "../../data/types";
+import { quitJobFlow } from "../../data/quitJob";
 import {
   STORAGE_KEY,
   clearStoredSession,
@@ -22,51 +23,75 @@ const validSession: FlowSession = {
 
 describe("validateFlowSession", () => {
   it("accepts a valid saved session", () => {
-    expect(validateFlowSession(validSession)).toEqual(validSession);
+    expect(validateFlowSession(validSession, quitJobFlow)).toEqual(validSession);
   });
 
   it("rejects an unknown flow id", () => {
     expect(
-      validateFlowSession({ ...validSession, flowId: "unknown-flow" as FlowSession["flowId"] }),
+      validateFlowSession(
+        { ...validSession, flowId: "unknown-flow" as FlowSession["flowId"] },
+        quitJobFlow,
+      ),
+    ).toBeNull();
+  });
+
+  it("rejects a flow id that does not match the loaded flow", () => {
+    expect(
+      validateFlowSession(
+        { ...validSession, flowId: "change-employer" },
+        quitJobFlow,
+      ),
     ).toBeNull();
   });
 
   it("rejects an unknown current node id", () => {
     expect(
-      validateFlowSession({ ...validSession, currentNodeId: "missing-node" }),
+      validateFlowSession(
+        { ...validSession, currentNodeId: "missing-node" },
+        quitJobFlow,
+      ),
     ).toBeNull();
   });
 
   it("rejects a path step with an unknown node id", () => {
     expect(
-      validateFlowSession({
-        ...validSession,
-        path: [{ nodeId: "missing-node" }],
-      }),
+      validateFlowSession(
+        {
+          ...validSession,
+          path: [{ nodeId: "missing-node" }],
+        },
+        quitJobFlow,
+      ),
     ).toBeNull();
   });
 
   it("rejects a question step without a choice id", () => {
     expect(
-      validateFlowSession({
-        ...validSession,
-        path: [{ nodeId: "q1-compensation" }],
-      }),
+      validateFlowSession(
+        {
+          ...validSession,
+          path: [{ nodeId: "q1-compensation" }],
+        },
+        quitJobFlow,
+      ),
     ).toBeNull();
   });
 
   it("rejects a question step with an unknown choice id", () => {
     expect(
-      validateFlowSession({
-        ...validSession,
-        path: [
-          {
-            nodeId: "q1-compensation",
-            choiceId: "tampered-choice",
-            choiceLabel: "Injected label",
-          },
-        ],
-      }),
+      validateFlowSession(
+        {
+          ...validSession,
+          path: [
+            {
+              nodeId: "q1-compensation",
+              choiceId: "tampered-choice",
+              choiceLabel: "Injected label",
+            },
+          ],
+        },
+        quitJobFlow,
+      ),
     ).toBeNull();
   });
 
@@ -83,7 +108,7 @@ describe("validateFlowSession", () => {
       ],
     };
 
-    const validated = validateFlowSession(tampered);
+    const validated = validateFlowSession(tampered, quitJobFlow);
     expect(validated?.path[1]?.choiceLabel).toBe("Yes, underpaid");
   });
 });
@@ -93,7 +118,7 @@ describe("loadStoredSession", () => {
     expect(loadStoredSession()).toBeNull();
   });
 
-  it("loads a valid stored session", () => {
+  it("loads a structurally valid stored session", () => {
     saveStoredSession(validSession);
     expect(loadStoredSession()).toEqual(validSession);
   });
@@ -104,14 +129,26 @@ describe("loadStoredSession", () => {
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
-  it("clears invalid sessions and returns null", () => {
+  it("clears sessions with unknown flow ids and returns null", () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ ...validSession, flowId: "missing-flow" }),
+    );
+
+    expect(loadStoredSession()).toBeNull();
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+  });
+
+  it("returns structurally valid sessions before graph validation", () => {
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ ...validSession, currentNodeId: "missing-node" }),
     );
 
-    expect(loadStoredSession()).toBeNull();
-    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+    expect(loadStoredSession()).toEqual({
+      ...validSession,
+      currentNodeId: "missing-node",
+    });
   });
 });
 

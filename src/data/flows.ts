@@ -1,22 +1,30 @@
-import type { FlowDefinition } from "./types";
-import { quitJobFlow } from "./quitJob";
-import { changeEmployerFlow } from "./changeEmployer";
-import { leaveProfessionFlow } from "./leaveProfession";
+import type { FlowDefinition, FlowId } from "./types";
 
-export const flows: Record<string, FlowDefinition> = {
-  "quit-job": quitJobFlow,
-  "change-employer": changeEmployerFlow,
-  "leave-profession": leaveProfessionFlow,
+const flowLoaders: Record<
+  FlowId,
+  () => Promise<FlowDefinition>
+> = {
+  "quit-job": () => import("./quitJob").then((module) => module.quitJobFlow),
+  "change-employer": () =>
+    import("./changeEmployer").then((module) => module.changeEmployerFlow),
+  "leave-profession": () =>
+    import("./leaveProfession").then((module) => module.leaveProfessionFlow),
 };
 
-export const flowList: FlowDefinition[] = [
-  quitJobFlow,
-  changeEmployerFlow,
-  leaveProfessionFlow,
-];
+const flowCache = new Map<FlowId, FlowDefinition>();
 
-export function getFlow(flowId: string): FlowDefinition | undefined {
-  return flows[flowId];
+export async function loadFlow(
+  flowId: FlowId,
+): Promise<FlowDefinition | undefined> {
+  const cached = flowCache.get(flowId);
+  if (cached) return cached;
+
+  const loader = flowLoaders[flowId];
+  if (!loader) return undefined;
+
+  const flow = await loader();
+  flowCache.set(flowId, flow);
+  return flow;
 }
 
 export function getMaxDepth(flow: FlowDefinition): number {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { SiteFooter } from "../components/SiteFooter";
-import { flowList, getFlow } from "../data/flows";
+import { flowMetaList, getFlowMeta } from "../data/flowMeta";
 import type { FlowSession } from "../data/types";
 import {
   clearStoredSession,
@@ -20,7 +20,7 @@ export function Hub() {
     }
   }, []);
 
-  const savedFlow = savedSession ? getFlow(savedSession.flowId) : undefined;
+  const savedFlow = savedSession ? getFlowMeta(savedSession.flowId) : undefined;
 
   function handleClearSession() {
     clearStoredSession();
@@ -73,7 +73,7 @@ export function Hub() {
         <h2 id="flows-heading" className="sr-only">
           Choose your decision
         </h2>
-        {flowList.map((flow) => (
+        {flowMetaList.map((flow) => (
           <Link
             key={flow.id}
             to={`/flow/${flow.id}`}

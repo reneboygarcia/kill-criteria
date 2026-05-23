@@ -1,0 +1,8 @@
+.fallback {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  color: var(--muted);
+  font-size: var(--text-base);
+}

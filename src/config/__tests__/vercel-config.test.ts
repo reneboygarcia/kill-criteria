@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
-  FONT_CACHE_HEADERS,
+  IMMUTABLE_CACHE_HEADERS,
   SECURITY_HEADERS,
 } from "../security-headers";
 
@@ -30,7 +30,11 @@ describe("vercel.json", () => {
   });
 
   it("keeps font cache headers in sync with security-headers.ts", () => {
-    expect(findHeaders("/fonts/(.*)")).toEqual([...FONT_CACHE_HEADERS]);
+    expect(findHeaders("/fonts/(.*)")).toEqual([...IMMUTABLE_CACHE_HEADERS]);
+  });
+
+  it("keeps hashed asset cache headers in sync with security-headers.ts", () => {
+    expect(findHeaders("/assets/(.*)")).toEqual([...IMMUTABLE_CACHE_HEADERS]);
   });
 
   it("keeps SPA rewrites for client-side routing", () => {
