@@ -77,11 +77,30 @@
 }
 
 .pathList {
+  list-style: none;
   margin-top: 14px;
-  padding-left: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pathStepButton {
+  width: 100%;
+  text-align: left;
+  padding: 14px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  color: var(--text);
   font-size: var(--text-base);
-  color: var(--muted);
-  line-height: 1.65;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.pathStepButton:hover {
+  border-color: color-mix(in srgb, var(--flow-accent, var(--accent)) 40%, var(--border));
+  background: color-mix(in srgb, var(--flow-accent, var(--accent)) 6%, white);
 }
 
 .actions {

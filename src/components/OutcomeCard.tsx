@@ -3,9 +3,15 @@ import type { OutcomeNode } from "../data/types";
 import { ReferencePanel } from "./ReferencePanel";
 import styles from "./OutcomeCard.module.css";
 
+type PathStep = {
+  index: number;
+  label: string;
+};
+
 type OutcomeCardProps = {
   node: OutcomeNode;
-  pathSummary?: string[];
+  pathSteps?: PathStep[];
+  onGoBack?: (stepIndex: number) => void;
   onCopy: () => void;
   onRestart: () => void;
   copyStatus: "idle" | "copied" | "error";
@@ -19,7 +25,8 @@ const variantClass = {
 
 export function OutcomeCard({
   node,
-  pathSummary,
+  pathSteps,
+  onGoBack,
   onCopy,
   onRestart,
   copyStatus,
@@ -34,12 +41,24 @@ export function OutcomeCard({
         <ReferencePanel reference={node.reference} defaultOpen />
       ) : null}
 
-      {pathSummary && pathSummary.length > 0 ? (
+      {pathSteps && pathSteps.length > 0 ? (
         <details className={styles.pathRecap}>
-          <summary>View your decision path</summary>
+          <summary>Review or change your path</summary>
           <ol className={styles.pathList}>
-            {pathSummary.map((step, i) => (
-              <li key={i}>{step}</li>
+            {pathSteps.map((step) => (
+              <li key={step.index}>
+                {onGoBack ? (
+                  <button
+                    type="button"
+                    className={styles.pathStepButton}
+                    onClick={() => onGoBack(step.index)}
+                  >
+                    {step.label}
+                  </button>
+                ) : (
+                  step.label
+                )}
+              </li>
             ))}
           </ol>
         </details>

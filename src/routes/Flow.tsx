@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ChoiceButtons } from "../components/ChoiceButtons";
 import { FlowShell } from "../components/FlowShell";
+import { SiteFooter } from "../components/SiteFooter";
 import { OutcomeCard } from "../components/OutcomeCard";
 import { PathTrail } from "../components/PathTrail";
 import { QuestionCard } from "../components/QuestionCard";
@@ -54,17 +55,29 @@ function FlowRunner({ flowId }: { flowId: FlowId }) {
     currentNode && "id" in currentNode ? currentNode.id : undefined;
 
   const isQuestion = currentNode?.type === "question";
+  const isOutcome = currentNode?.type === "outcome";
 
-  const pathSummary = useMemo(() => {
+  const pathSteps = useMemo(() => {
     if (!flow) return [];
-    return path.flatMap((stepItem) => {
-      const node = flow.nodes[stepItem.nodeId];
-      if (!node || node.type === "start") return [];
-      if (node.type === "question") {
-        return [`${node.label}: ${stepItem.choiceLabel ?? "—"}`];
-      }
-      return [];
-    });
+    return path
+      .map((stepItem, index) => {
+        const node = flow.nodes[stepItem.nodeId];
+        if (!node) return null;
+
+        let label = "";
+        if (node.type === "start") {
+          label = node.title;
+        } else if (node.type === "question") {
+          label = stepItem.choiceLabel
+            ? `${node.label}: ${stepItem.choiceLabel}`
+            : node.label;
+        } else {
+          label = node.title;
+        }
+
+        return { index, label };
+      })
+      .filter((step): step is { index: number; label: string } => step !== null);
   }, [flow, path]);
 
   useEffect(() => {
@@ -100,20 +113,17 @@ function FlowRunner({ flowId }: { flowId: FlowId }) {
       step={Math.min(step, maxSteps)}
       maxSteps={maxSteps}
       focusMode={isQuestion}
-      pathTrail={
-        !isQuestion ? (
-          <PathTrail flow={flow} path={path} onGoBack={goBack} />
-        ) : null
-      }
     >
-      <Link to="/" className={styles.backLink}>
-        ← All decisions
-      </Link>
+      {!isOutcome ? (
+        <Link to="/" className={styles.backLink}>
+          ← All decisions
+        </Link>
+      ) : null}
 
       <section
         ref={mainRef}
         tabIndex={-1}
-        className={`${styles.step} ${isQuestion ? styles.questionPage : ""}`}
+        className={`${styles.step} ${isQuestion ? styles.questionPage : ""} ${isOutcome ? styles.outcomePage : ""}`}
       >
         {currentNode.type === "start" && (
           <StepTransition stepKey={nodeId ?? "start"}>
@@ -157,7 +167,8 @@ function FlowRunner({ flowId }: { flowId: FlowId }) {
           <StepTransition stepKey={nodeId ?? "outcome"}>
             <OutcomeCard
               node={currentNode}
-              pathSummary={pathSummary}
+              pathSteps={pathSteps}
+              onGoBack={goBack}
               onCopy={handleCopy}
               onRestart={restart}
               copyStatus={copyStatus}
@@ -169,6 +180,14 @@ function FlowRunner({ flowId }: { flowId: FlowId }) {
       {isQuestion && path.length > 0 ? (
         <PathTrail flow={flow} path={path} onGoBack={goBack} compact />
       ) : null}
+
+      {isOutcome ? (
+        <Link to="/" className={styles.backLink}>
+          ← All decisions
+        </Link>
+      ) : null}
+
+      <SiteFooter compact />
     </FlowShell>
   );
 }

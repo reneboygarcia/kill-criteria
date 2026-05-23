@@ -51,6 +51,12 @@
   padding-bottom: 8px;
 }
 
+.outcomePage {
+  justify-content: center;
+  min-height: min(50dvh, 480px);
+  padding-top: 8px;
+}
+
 .startCard {
   border: 1.5px solid color-mix(in srgb, var(--flow-accent, var(--accent)) 30%, var(--border));
   border-radius: var(--radius-card);
