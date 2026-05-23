@@ -1,0 +1,105 @@
+.shell {
+  min-height: 100dvh;
+  padding: 28px 20px calc(28px + var(--safe-bottom));
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.focusMode {
+  padding-top: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.focusMode .header {
+  margin-bottom: 32px;
+}
+
+.tag {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--flow-accent, var(--accent));
+  letter-spacing: 0.01em;
+  border: 1.5px solid color-mix(in srgb, var(--flow-accent, var(--accent)) 35%, var(--border));
+  background: color-mix(in srgb, var(--flow-accent, var(--accent)) 8%, white);
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: var(--sans);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.focusLabel {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.focusTitle {
+  font-family: var(--sans);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-size: var(--text-base);
+  color: var(--muted);
+  margin-top: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.progressTrack {
+  height: 6px;
+  background: var(--border-soft);
+  border-radius: var(--radius-pill);
+  margin-top: 24px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--flow-accent, var(--accent));
+  border-radius: var(--radius-pill);
+  transition: width var(--duration-layout) var(--ease-spring);
+  transform-origin: left center;
+}
+
+.progressLabel {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-top: 44px;
+    padding-bottom: 64px;
+  }
+}

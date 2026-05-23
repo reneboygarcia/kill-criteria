@@ -1,0 +1,118 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sticky {
+  position: sticky;
+  bottom: 0;
+  padding: 20px 0 calc(12px + var(--safe-bottom));
+  background: linear-gradient(to top, var(--bg) 88%, transparent);
+  margin-top: auto;
+}
+
+.button {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 18px 28px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  text-align: center;
+  transition:
+    transform var(--duration-fast) var(--ease-spring),
+    border-color 0.2s var(--ease-out),
+    background 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
+  box-shadow: var(--shadow-soft);
+  will-change: transform;
+}
+
+.button:hover {
+  background: var(--surface-soft);
+  box-shadow: 0 4px 14px rgba(61, 79, 95, 0.08);
+}
+
+.button:active {
+  transform: scale(0.94);
+  transition-duration: 0.1s;
+}
+
+.enter {
+  animation: choiceEnter var(--duration-layout) var(--ease-spring) both;
+}
+
+@keyframes choiceEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.stagger1 {
+  animation-delay: calc(var(--stagger-step) * 1);
+}
+
+.stagger2 {
+  animation-delay: calc(var(--stagger-step) * 2);
+}
+
+.stagger3 {
+  animation-delay: calc(var(--stagger-step) * 3);
+}
+
+.stagger4 {
+  animation-delay: calc(var(--stagger-step) * 4);
+}
+
+.yes {
+  border-color: color-mix(in srgb, var(--coral) 45%, var(--border));
+  background: var(--coral-soft);
+  color: var(--coral-text);
+}
+
+.yes:hover {
+  background: color-mix(in srgb, var(--coral-soft) 75%, var(--coral));
+}
+
+.no {
+  border-color: color-mix(in srgb, var(--success) 45%, var(--border));
+  background: var(--success-soft);
+  color: var(--success-text);
+}
+
+.no:hover {
+  background: color-mix(in srgb, var(--success-soft) 75%, var(--success));
+}
+
+.neutral {
+  border-color: color-mix(in srgb, var(--plan) 45%, var(--border));
+  background: var(--plan-soft);
+  color: var(--plan-text);
+}
+
+.neutral:hover {
+  background: color-mix(in srgb, var(--plan-soft) 75%, var(--plan));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .stagger1,
+  .stagger2,
+  .stagger3,
+  .stagger4 {
+    animation: none !important;
+  }
+
+  .button:active {
+    transform: none;
+  }
+}
