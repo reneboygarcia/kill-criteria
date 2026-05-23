@@ -1,0 +1,21 @@
+{
+  "name": "Kill Criteria — Civil Engineer Decision Guide",
+  "short_name": "Kill Criteria",
+  "description": "A calm decision guide for Philippine civil engineers, based on Annie Duke's Quit framework.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f1ec",
+  "theme_color": "#f3f1ec",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
