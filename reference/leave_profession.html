@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kill Criteria #3 — Leave the Profession?</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --text: #e8e4dc;
+    --muted: #6b6b6b;
+    --accent: #c86e6e;
+    --danger: #e05a4e;
+    --success: #4e9e6e;
+    --amber: #d4884a;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .label-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--accent);
+    display: inline-block;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: var(--mono);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  .tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  .connector {
+    width: 2px;
+    height: 28px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .connector.danger  { background: var(--danger); opacity: 0.5; }
+  .connector.success { background: var(--success); opacity: 0.5; }
+  .connector.neutral { background: var(--amber); opacity: 0.5; }
+
+  .branch-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .branch-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    max-width: 280px;
+  }
+
+  .branch-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+  }
+  .branch-label.yes     { color: var(--danger); border: 1px solid var(--danger); }
+  .branch-label.no      { color: var(--success); border: 1px solid var(--success); }
+  .branch-label.neutral { color: var(--amber);   border: 1px solid var(--amber); }
+
+  .node {
+    width: 100%;
+    max-width: 240px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .node .node-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .node .node-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .node .node-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .node.start {
+    border-color: var(--accent);
+    max-width: 340px;
+    text-align: center;
+  }
+  .node.start .node-title { color: var(--accent); font-family: var(--mono); font-size: 14px; }
+
+  .node.question { border-color: #3a3a3a; }
+  .node.question .node-label { color: var(--accent); }
+  .node.wide { max-width: 400px; }
+
+  .node.outcome-stay {
+    border-color: var(--success);
+    background: #0e1f15;
+  }
+  .node.outcome-stay .node-title { color: var(--success); }
+
+  .node.outcome-change {
+    border-color: var(--amber);
+    background: #1f1508;
+  }
+  .node.outcome-change .node-title { color: var(--amber); }
+
+  .node.outcome-exit {
+    border-color: var(--danger);
+    background: #1f0e0e;
+  }
+  .node.outcome-exit .node-title { color: var(--danger); }
+
+  /* OFW checklist */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0 16px;
+    text-transform: uppercase;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .checklist-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    background: var(--surface);
+  }
+  .checklist-card .card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .checklist-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist-card ul li {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .checklist-card ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+  }
+
+  /* Pivot fields */
+  .pivot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+  }
+  .pivot-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+  .pivot-card .pivot-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .pivot-card .pivot-ce-skill {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .pivot-card .pivot-ce-skill span {
+    color: var(--accent);
+    font-family: var(--mono);
+    display: block;
+    font-size: 9px;
+    margin-top: 2px;
+  }
+
+  /* Warning box */
+  .warning-box {
+    border: 1px solid var(--danger);
+    border-left: 3px solid var(--danger);
+    background: #1f0e0e;
+    border-radius: 4px;
+    padding: 12px 16px;
+    max-width: 540px;
+    width: 100%;
+    margin-top: 12px;
+  }
+  .warning-box p {
+    font-size: 12px;
+    color: #e8b4b0;
+    line-height: 1.6;
+  }
+  .warning-box strong {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--danger);
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .mt8 { margin-top: 8px; }
+
+  @media (max-width: 560px) {
+    .two-col { grid-template-columns: 1fr; }
+    .pivot-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="label-tag">Kill Criteria — File 3 of 3</div>
+  <h1>Should I leave civil engineering entirely?</h1>
+  <p>The last gate — OFW, pivot, or a clean exit &nbsp;·&nbsp; r/civilengineer_ph</p>
+</header>
+
+<div class="tree">
+
+  <!-- START -->
+  <div class="node start">
+    <div class="node-title">You're seriously considering leaving CE</div>
+    <div class="node-sub">Pattern confirmed across employers. This is the final gate before you exit.</div>
+  </div>
+
+  <div class="connector"></div>
+
+  <!-- Q1: OFW check -->
+  <div class="node question wide">
+    <div class="node-label">Q1 — Abroad track first</div>
+    <div class="node-title">Have you seriously explored working abroad as a CE?</div>
+    <div class="node-sub">Middle East, Australia, Canada, Singapore — CE demand is real and pay is 5–10× local. This is not the same as your local market experience.</div>
+  </div>
+
+  <div class="connector"></div>
+
+  <div class="branch-row">
+
+    <!-- LEFT: OFW not viable -->
+    <div class="branch-col">
+      <div class="branch-label yes">Not viable for me</div>
+      <div class="connector danger"></div>
+      <div class="node question">
+        <div class="node-label">Q2 — Pivot field</div>
+        <div class="node-title">Do you have a specific field to pivot to?</div>
+        <div class="node-sub">PropTech, real estate dev, LGU, BIM consulting, teaching, project management outside CE.</div>
+      </div>
+      <div class="connector"></div>
+      <div class="branch-row">
+        <div class="branch-col">
+          <div class="branch-label no">No clear plan</div>
+          <div class="connector neutral"></div>
+          <div class="node outcome-change">
+            <div class="node-label">Not ready yet</div>
+            <div class="node-title">Slow exit — build first</div>
+            <div class="node-sub">Upskill nights and weekends. Save 6 months of expenses. Identify the target field. Then exit cleanly.</div>
+          </div>
+        </div>
+        <div class="branch-col">
+          <div class="branch-label yes">Yes, have a plan</div>
+          <div class="connector danger"></div>
+          <div class="node outcome-exit">
+            <div class="node-label">Kill criterion met</div>
+            <div class="node-title">⛔ Exit with dignity</div>
+            <div class="node-sub">Resign professionally. 30-day notice minimum. Get COE in writing. Keep PRC license active for 2 more cycles — costs little, burns no bridges.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: OFW viable -->
+    <div class="branch-col">
+      <div class="branch-label no">Viable — haven't tried</div>
+      <div class="connector success"></div>
+      <div class="node question">
+        <div class="node-label">Q2b — OFW readiness</div>
+        <div class="node-title">Are your documents and credentials ready?</div>
+        <div class="node-sub">PRC + DFA authentication, POEA, credential evaluation for target country?</div>
+      </div>
+      <div class="connector"></div>
+      <div class="branch-row">
+        <div class="branch-col">
+          <div class="branch-label yes">Not yet</div>
+          <div class="connector neutral"></div>
+          <div class="node outcome-change">
+            <div class="node-label">Prep the OFW track</div>
+            <div class="node-title">Start the paperwork now</div>
+            <div class="node-sub">Takes 3–9 months to complete. Start while employed. See OFW checklist below.</div>
+          </div>
+        </div>
+        <div class="branch-col">
+          <div class="branch-label no">Ready to go</div>
+          <div class="connector success"></div>
+          <div class="node outcome-stay">
+            <div class="node-label">OFW track activated</div>
+            <div class="node-title">✅ Try abroad first</div>
+            <div class="node-sub">Don't resign until you have a signed offer and visa in hand. One offer changes everything.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OFW Checklist -->
+  <div class="section-label">OFW Process Checklist — Civil Engineer from PH</div>
+
+  <div class="two-col">
+    <div class="checklist-card">
+      <div class="card-title">Documents (all destinations)</div>
+      <ul>
+        <li>PRC ID — valid and renewed</li>
+        <li>DFA apostille / Red Ribbon on PRC cert</li>
+        <li>TOR and diploma — authenticated</li>
+        <li>NSO/PSA birth certificate</li>
+        <li>NBI clearance — internationally recognized</li>
+        <li>Work experience certificate per employer</li>
+        <li>Passport — at least 2 years validity</li>
+      </ul>
+    </div>
+    <div class="checklist-card">
+      <div class="card-title">Country-specific requirements</div>
+      <ul>
+        <li>Qatar / UAE — UPDA exam or equivalent eval</li>
+        <li>Saudi Arabia — SASO accreditation may apply</li>
+        <li>Australia — Engineers Australia (CDR report)</li>
+        <li>Canada — IQAS or WES evaluation</li>
+        <li>Singapore — PE registration for senior roles</li>
+        <li>POEA — verify agency accreditation at poea.gov.ph</li>
+        <li>OEC — required before departure</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Pivot fields -->
+  <div class="section-label">Career pivots that use your CE skills</div>
+
+  <div class="pivot-grid">
+    <div class="pivot-card">
+      <div class="pivot-title">PropTech</div>
+      <div class="pivot-ce-skill">Construction tech, digital twin
+        <span>CE skill: site + technical</span>
+      </div>
+    </div>
+    <div class="pivot-card">
+      <div class="pivot-title">Real estate dev</div>
+      <div class="pivot-ce-skill">Project management, costing
+        <span>CE skill: QS + estimation</span>
+      </div>
+    </div>
+    <div class="pivot-card">
+      <div class="pivot-title">LGU / Gov planning</div>
+      <div class="pivot-ce-skill">Infrastructure, zoning, permits
+        <span>CE skill: design + compliance</span>
+      </div>
+    </div>
+    <div class="pivot-card">
+      <div class="pivot-title">BIM consulting</div>
+      <div class="pivot-ce-skill">Revit, Navisworks, coordination
+        <span>CE skill: drafting + modeling</span>
+      </div>
+    </div>
+    <div class="pivot-card">
+      <div class="pivot-title">CE teaching</div>
+      <div class="pivot-ce-skill">HEIs, review centers, TESDA
+        <span>CE skill: board passer + exp</span>
+      </div>
+    </div>
+    <div class="pivot-card">
+      <div class="pivot-title">Supply / procurement</div>
+      <div class="pivot-ce-skill">Materials, vendor mgmt
+        <span>CE skill: specs + costing</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warning -->
+  <div class="warning-box">
+    <strong>One rule before you exit</strong>
+    <p>Don't resign on emotion. Resign on a plan. Keep your PRC license active for at least 2 more renewal cycles — the cost is minimal and you never know when a CE credential opens an unexpected door abroad or locally. Burn no bridges in your resignation letter.</p>
+  </div>
+
+</div>
+
+<div class="legend" style="max-width:600px;margin:40px auto 0;">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div> Try OFW track first</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Build plan before exiting</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div> Kill criterion met — exit with dignity</div>
+</div>
+
+<footer>
+  <div>Based on Annie Duke's kill criteria framework &nbsp;·&nbsp; r/civilengineer_ph community tool</div>
+  <div class="mt8">File 3 of 3 &nbsp;·&nbsp; See also: quit_job_stay_leave.html &nbsp;·&nbsp; change_employer.html</div>
+</footer>
+
+</body>
+</html>

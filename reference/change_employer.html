@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kill Criteria #2 — Change Employer or Niche?</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --text: #e8e4dc;
+    --muted: #6b6b6b;
+    --accent: #6e9ec8;
+    --danger: #e05a4e;
+    --success: #4e9e6e;
+    --amber: #d4884a;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .label-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--accent);
+    display: inline-block;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: var(--mono);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  .tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .connector {
+    width: 2px;
+    height: 28px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .connector.danger { background: var(--danger); opacity: 0.5; }
+  .connector.success { background: var(--success); opacity: 0.5; }
+  .connector.neutral { background: var(--amber); opacity: 0.5; }
+
+  .branch-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .branch-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    max-width: 280px;
+  }
+
+  .branch-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+  }
+  .branch-label.yes { color: var(--danger); border: 1px solid var(--danger); }
+  .branch-label.no  { color: var(--success); border: 1px solid var(--success); }
+  .branch-label.neutral { color: var(--amber); border: 1px solid var(--amber); }
+
+  .node {
+    width: 100%;
+    max-width: 240px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .node .node-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .node .node-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .node .node-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .node.start {
+    border-color: var(--accent);
+    max-width: 320px;
+    text-align: center;
+  }
+  .node.start .node-title { color: var(--accent); font-family: var(--mono); font-size: 14px; }
+
+  .node.question { border-color: #3a3a3a; }
+  .node.question .node-label { color: var(--accent); }
+
+  .node.wide { max-width: 380px; }
+
+  .node.outcome-stay {
+    border-color: var(--success);
+    background: #0e1f15;
+  }
+  .node.outcome-stay .node-title { color: var(--success); }
+
+  .node.outcome-change {
+    border-color: var(--amber);
+    background: #1f1508;
+  }
+  .node.outcome-change .node-title { color: var(--amber); }
+
+  .node.outcome-exit {
+    border-color: var(--danger);
+    background: #1f0e0e;
+  }
+  .node.outcome-exit .node-title { color: var(--danger); }
+
+  /* Niche list */
+  .niche-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 560px;
+  }
+  .niche-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+  .niche-card .niche-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+  .niche-card .niche-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 560px;
+    margin: 16px 0;
+    text-transform: uppercase;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .mt8 { margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="label-tag">Kill Criteria — File 2 of 3</div>
+  <h1>Should I change employer or niche?</h1>
+  <p>For engineers who have already tried once — is it the employer or the field? &nbsp;·&nbsp; r/civilengineer_ph</p>
+</header>
+
+<div class="tree">
+
+  <!-- START -->
+  <div class="node start">
+    <div class="node-title">You've left or are leaving an employer</div>
+    <div class="node-sub">Now checking whether it's the company or a deeper pattern</div>
+  </div>
+
+  <div class="connector"></div>
+
+  <!-- Q1 -->
+  <div class="node question wide">
+    <div class="node-label">Q1 — Pattern check</div>
+    <div class="node-title">Same problems at 2 or more firms?</div>
+    <div class="node-sub">Low pay, no growth, toxic culture — showing up repeatedly even after changing employers?</div>
+  </div>
+
+  <div class="connector"></div>
+
+  <!-- Q1 Branch -->
+  <div class="branch-row">
+
+    <!-- LEFT: YES pattern -->
+    <div class="branch-col">
+      <div class="branch-label yes">Yes — pattern</div>
+      <div class="connector danger"></div>
+      <div class="node question">
+        <div class="node-label">Q2 — Passion check</div>
+        <div class="node-title">Do you still care about the work itself?</div>
+        <div class="node-sub">Not the paycheck. The actual work: design, site, structures, estimation.</div>
+      </div>
+      <div class="connector"></div>
+      <div class="branch-row">
+
+        <div class="branch-col">
+          <div class="branch-label yes">No — burned out</div>
+          <div class="connector danger"></div>
+          <div class="node question">
+            <div class="node-label">Q3 — Exit readiness</div>
+            <div class="node-title">Do you have an exit option ready?</div>
+            <div class="node-sub">Skills for pivot, 6-month savings, OFW visa in process, or grad school funded?</div>
+          </div>
+          <div class="connector"></div>
+          <div class="branch-row">
+            <div class="branch-col">
+              <div class="branch-label yes">Yes, ready</div>
+              <div class="connector danger"></div>
+              <div class="node outcome-exit">
+                <div class="node-label">Kill criterion met</div>
+                <div class="node-title">⛔ Leave CE entirely</div>
+                <div class="node-sub">Activate File 3. Plan the transition professionally.</div>
+              </div>
+            </div>
+            <div class="branch-col">
+              <div class="branch-label no">Not yet</div>
+              <div class="connector neutral"></div>
+              <div class="node outcome-change">
+                <div class="node-label">Slow exit plan</div>
+                <div class="node-title">Build runway first</div>
+                <div class="node-sub">Upskill nights/weekends. Save 6 months. Then exit. Don't quit broke.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="branch-col">
+          <div class="branch-label no">Yes, still care</div>
+          <div class="connector success"></div>
+          <div class="node question">
+            <div class="node-label">Q3b — Root cause</div>
+            <div class="node-title">What's actually wrong?</div>
+            <div class="node-sub">Wrong sector? Wrong specialization? Wrong region? The niche matters.</div>
+          </div>
+          <div class="connector"></div>
+          <div class="node outcome-change">
+            <div class="node-label">Niche / sector switch</div>
+            <div class="node-title">🔄 Try a different track</div>
+            <div class="node-sub">Private dev, infra, geotech, MEP, BIM consulting, or OFW. See niche guide below.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: NO, new firm is different -->
+    <div class="branch-col">
+      <div class="branch-label no">No — new firm is better</div>
+      <div class="connector success"></div>
+      <div class="node question">
+        <div class="node-label">Q2b — Check-in</div>
+        <div class="node-title">Are the key issues resolved here?</div>
+        <div class="node-sub">Salary fair, environment safe, some growth path visible?</div>
+      </div>
+      <div class="connector"></div>
+      <div class="branch-row">
+        <div class="branch-col">
+          <div class="branch-label yes">Yes, resolved</div>
+          <div class="connector success"></div>
+          <div class="node outcome-stay">
+            <div class="node-label">Stay — reset clock</div>
+            <div class="node-title">✅ Build here</div>
+            <div class="node-sub">Write new kill criteria now. Set a 12–18 month checkpoint. Don't coast.</div>
+          </div>
+        </div>
+        <div class="branch-col">
+          <div class="branch-label no">Still rough</div>
+          <div class="connector neutral"></div>
+          <div class="node outcome-change">
+            <div class="node-label">Partial improvement</div>
+            <div class="node-title">Give it 6 months max</div>
+            <div class="node-sub">Set a hard deadline. If the key issues aren't resolved by then → pattern confirmed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Niche section -->
+  <div class="section-label">PH Civil Engineering — Better-paying niches and tracks</div>
+
+  <div class="niche-grid">
+    <div class="niche-card">
+      <div class="niche-title">BIM / Digital delivery</div>
+      <div class="niche-desc">Revit, Navisworks, BIM 360. Demand growing fast in PH large-scale infra. ₱50–80k+/mo possible.</div>
+    </div>
+    <div class="niche-card">
+      <div class="niche-title">Geotechnical / Soil</div>
+      <div class="niche-desc">Specialized, less competition. Mining, reclamation, foundation work. Often project-based big pay.</div>
+    </div>
+    <div class="niche-card">
+      <div class="niche-title">Quantity Surveying</div>
+      <div class="niche-desc">QS roles export well to Middle East, Australia. Add RICS accreditation for OFW advantage.</div>
+    </div>
+    <div class="niche-card">
+      <div class="niche-title">Private real estate dev</div>
+      <div class="niche-desc">Ayala, SMDC, DMCI — better pay than small contractors. Look for project engineer roles.</div>
+    </div>
+    <div class="niche-card">
+      <div class="niche-title">OFW — Middle East</div>
+      <div class="niche-desc">Qatar, UAE, KSA. 5–10× local salary. UPDA exam for Qatar. POEA + PRC docs required.</div>
+    </div>
+    <div class="niche-card">
+      <div class="niche-title">Government / DPWH infra</div>
+      <div class="niche-desc">Lower base but stable. BBB program projects give exposure. Government hospitalization, GSIS.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="legend" style="max-width:600px;margin:40px auto 0;">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div> Stay / build here</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Switch niche or wait with deadline</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div> Kill criterion met — escalate to File 3</div>
+</div>
+
+<footer>
+  <div>Based on Annie Duke's kill criteria framework &nbsp;·&nbsp; r/civilengineer_ph community tool</div>
+  <div class="mt8">File 2 of 3 &nbsp;·&nbsp; See also: quit_job_stay_leave.html &nbsp;·&nbsp; leave_profession.html</div>
+</footer>
+
+</body>
+</html>
