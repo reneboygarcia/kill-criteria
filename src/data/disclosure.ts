@@ -53,7 +53,7 @@ export const DISCLOSURE_SECTIONS: DisclosureSection[] = [
     title: "Privacy",
     paragraphs: [
       "Progress through a flow may be saved in your browser's local storage so you can resume later. That data stays on your device; we do not operate user accounts or collect personal information through the app itself.",
-      "If this site is hosted on a third-party platform, that host may process standard server logs (such as IP address and request metadata) under its own terms.",
+      "This site is hosted on Vercel. Vercel may process standard server logs (such as IP address, browser type, and request metadata) under its own privacy policy. We do not receive or store those logs in the app.",
     ],
   },
   {
