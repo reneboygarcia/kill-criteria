@@ -1,0 +1,111 @@
+.page {
+  min-height: 100dvh;
+  padding: 36px 20px 56px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  animation: fadeIn var(--duration-layout) var(--ease-out) both;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+}
+
+.backLink:hover {
+  color: var(--accent-flow-1);
+  border-color: color-mix(in srgb, var(--accent-flow-1) 30%, var(--border));
+  text-decoration: none;
+}
+
+.tag {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--accent-flow-1);
+  letter-spacing: 0.02em;
+  border: 1.5px solid color-mix(in srgb, var(--accent-flow-1) 40%, var(--border));
+  background: color-mix(in srgb, var(--surface) 88%, var(--accent-flow-1));
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.title {
+  font-family: var(--sans);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.summary {
+  margin-top: 14px;
+  font-size: var(--text-base);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface-soft);
+}
+
+.updated {
+  margin-top: 12px;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-family: var(--sans);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.paragraph + .paragraph {
+  margin-top: 10px;
+}
+
+.paragraph {
+  font-size: var(--text-base);
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-top: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    animation: none;
+  }
+}
