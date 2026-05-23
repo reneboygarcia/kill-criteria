@@ -4,31 +4,13 @@ import type {
   FlowDefinition,
   FlowId,
   FlowNode,
-  FlowSession,
   PathStep,
 } from "../data/types";
-
-const STORAGE_KEY = "kill-criteria-session";
-
-function loadSession(): FlowSession | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as FlowSession;
-    if (!parsed.flowId || !parsed.currentNodeId) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-function saveSession(session: FlowSession | null) {
-  if (!session) {
-    localStorage.removeItem(STORAGE_KEY);
-    return;
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-}
+import {
+  clearStoredSession,
+  loadStoredSession,
+  saveStoredSession,
+} from "../lib/flowSession";
 
 export function useFlowState(flowId: FlowId) {
   const flow = useMemo(() => getFlow(flowId), [flowId]);
@@ -39,7 +21,7 @@ export function useFlowState(flowId: FlowId) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const saved = loadSession();
+    const saved = loadStoredSession();
     if (saved?.flowId === flowId) {
       setCurrentNodeId(saved.currentNodeId);
       setPath(saved.path);
@@ -52,7 +34,7 @@ export function useFlowState(flowId: FlowId) {
 
   useEffect(() => {
     if (!hydrated || !flow) return;
-    saveSession({ flowId, currentNodeId, path });
+    saveStoredSession({ flowId, currentNodeId, path });
   }, [flowId, currentNodeId, path, hydrated, flow]);
 
   const currentNode: FlowNode | undefined = flow?.nodes[currentNodeId];
@@ -88,11 +70,11 @@ export function useFlowState(flowId: FlowId) {
     if (!flow) return;
     setCurrentNodeId(flow.startNodeId);
     setPath([]);
-    saveSession(null);
+    clearStoredSession();
   }, [flow]);
 
   const clearSession = useCallback(() => {
-    saveSession(null);
+    clearStoredSession();
   }, []);
 
   return {
