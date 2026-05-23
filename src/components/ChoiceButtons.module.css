@@ -13,6 +13,8 @@
 }
 
 .button {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   min-height: var(--tap-min);
   padding: 18px 28px;
@@ -30,6 +32,36 @@
     box-shadow 0.2s var(--ease-out);
   box-shadow: var(--shadow-soft);
   will-change: transform;
+  --ripple-color: color-mix(in srgb, var(--text) 18%, transparent);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+}
+
+.rippleLayer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--ripple-color);
+  opacity: 0.28;
+  transform: scale(0);
+  animation: rippleExpand 500ms var(--ease-out) forwards;
+}
+
+@keyframes rippleExpand {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 .button:hover {
@@ -77,6 +109,7 @@
   border-color: color-mix(in srgb, var(--coral) 45%, var(--border));
   background: var(--coral-soft);
   color: var(--coral-text);
+  --ripple-color: color-mix(in srgb, var(--coral) 35%, transparent);
 }
 
 .yes:hover {
@@ -87,6 +120,7 @@
   border-color: color-mix(in srgb, var(--success) 45%, var(--border));
   background: var(--success-soft);
   color: var(--success-text);
+  --ripple-color: color-mix(in srgb, var(--success) 35%, transparent);
 }
 
 .no:hover {
@@ -97,6 +131,7 @@
   border-color: color-mix(in srgb, var(--plan) 45%, var(--border));
   background: var(--plan-soft);
   color: var(--plan-text);
+  --ripple-color: color-mix(in srgb, var(--plan) 35%, transparent);
 }
 
 .neutral:hover {
@@ -114,5 +149,9 @@
 
   .button:active {
     transform: none;
+  }
+
+  .ripple {
+    animation: none !important;
   }
 }
