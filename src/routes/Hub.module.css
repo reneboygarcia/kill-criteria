@@ -99,13 +99,40 @@
   animation-delay: calc(var(--stagger-step) * 1);
 }
 
-.resumeLink {
-  display: inline-block;
+.resumeActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
   margin-top: 10px;
+}
+
+.resumeLink {
   font-family: var(--sans);
   font-size: var(--text-base);
   font-weight: 500;
   color: var(--accent-flow-1);
+}
+
+.clearSession {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  min-height: var(--tap-min);
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out);
+}
+
+.clearSession:hover {
+  border-color: color-mix(in srgb, var(--muted) 40%, var(--border));
+  color: var(--text);
 }
 
 .primerTitle {

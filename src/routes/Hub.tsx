@@ -4,27 +4,28 @@ import { Link } from "react-router-dom";
 import { SiteFooter } from "../components/SiteFooter";
 import { flowList, getFlow } from "../data/flows";
 import type { FlowSession } from "../data/types";
+import {
+  clearStoredSession,
+  loadStoredSession,
+} from "../lib/flowSession";
 import styles from "./Hub.module.css";
-
-const STORAGE_KEY = "kill-criteria-session";
 
 export function Hub() {
   const [savedSession, setSavedSession] = useState<FlowSession | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as FlowSession;
-      if (parsed.flowId && parsed.currentNodeId && parsed.path.length > 0) {
-        setSavedSession(parsed);
-      }
-    } catch {
-      /* ignore */
+    const session = loadStoredSession();
+    if (session && session.path.length > 0) {
+      setSavedSession(session);
     }
   }, []);
 
   const savedFlow = savedSession ? getFlow(savedSession.flowId) : undefined;
+
+  function handleClearSession() {
+    clearStoredSession();
+    setSavedSession(null);
+  }
 
   return (
     <div className={styles.page}>
@@ -40,9 +41,18 @@ export function Hub() {
       {savedSession && savedFlow ? (
         <aside className={styles.resume}>
           <p>You have an in-progress session:</p>
-          <Link to={`/flow/${savedSession.flowId}`} className={styles.resumeLink}>
-            Resume — {savedFlow.title}
-          </Link>
+          <div className={styles.resumeActions}>
+            <Link to={`/flow/${savedSession.flowId}`} className={styles.resumeLink}>
+              Resume — {savedFlow.title}
+            </Link>
+            <button
+              type="button"
+              className={styles.clearSession}
+              onClick={handleClearSession}
+            >
+              Clear saved progress
+            </button>
+          </div>
         </aside>
       ) : null}
 
