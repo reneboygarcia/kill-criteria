@@ -1,20 +1,19 @@
 :root {
-  /* Blueprint-on-paper — cool draft tint with warm paper undertone */
-  --bg: #e9f0f6;
-  --bg-warm: #f0ebe4;
-  --bg-blueprint: #d4e4f2;
-  --bg-grid-major: rgba(58, 110, 165, 0.16);
-  --bg-grid-minor: rgba(58, 110, 165, 0.08);
-  --bg-grid-accent: rgba(58, 110, 165, 0.22);
-  --bg-vignette: rgba(58, 90, 120, 0.1);
+  /* Warm drafting-paper base — not clinical white */
+  --bg: #f3f1ec;
+  --bg-warm: #ebe8e1;
+  --bg-grid-major: rgba(102, 157, 246, 0.09);
+  --bg-grid-minor: rgba(102, 157, 246, 0.045);
+  --bg-grid-accent: rgba(123, 158, 184, 0.07);
+  --bg-vignette: rgba(123, 158, 184, 0.06);
 
-  --surface: #faf8f5;
-  --surface-elevated: color-mix(in srgb, var(--surface) 96%, white);
-  --surface-soft: #f3f0eb;
-  --border: #d4dce4;
-  --border-soft: #e2e8ef;
-  --text: #2f3a42;
-  --muted: #56636d;
+  --surface: #fffcf8;
+  --surface-elevated: var(--surface);
+  --surface-soft: #f8f6f2;
+  --border: #e2ddd4;
+  --border-soft: #ece8e1;
+  --text: #3c4043;
+  --muted: #5f6368;
 
   --stay: #81c995;
   --stay-soft: #eef7f1;
@@ -61,7 +60,7 @@
 
   --content-max: 520px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --shadow-soft: 0 1px 4px rgba(40, 60, 80, 0.08), 0 8px 24px rgba(40, 60, 80, 0.07);
+  --shadow-soft: 0 1px 3px rgba(60, 64, 67, 0.07), 0 6px 18px rgba(90, 100, 110, 0.06);
   --tap-min: 58px;
 }
 

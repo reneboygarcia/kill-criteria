@@ -135,7 +135,7 @@
   border: 1.5px solid var(--border);
   border-radius: var(--radius-card);
   padding: 22px 24px;
-  background: color-mix(in srgb, var(--card-accent, var(--accent)) 6%, var(--surface-elevated));
+  background: color-mix(in srgb, var(--card-accent, var(--accent)) 4%, var(--surface));
   text-decoration: none;
   transition:
     border-color 0.25s var(--ease-out),
