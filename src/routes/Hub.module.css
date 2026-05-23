@@ -238,16 +238,14 @@
   background: var(--plan);
 }
 
-.exit {
-  background: var(--move);
+.exitLegend {
+  border-color: color-mix(in srgb, var(--move) 35%, var(--border));
+  background: color-mix(in srgb, var(--move) 8%, var(--surface-elevated));
+  color: var(--move-text);
 }
 
-.footer {
-  text-align: center;
-  font-size: var(--text-sm);
-  color: var(--muted);
-  font-family: var(--sans);
-  line-height: 1.55;
+.exit {
+  background: var(--move);
 }
 
 @media (min-width: 768px) {

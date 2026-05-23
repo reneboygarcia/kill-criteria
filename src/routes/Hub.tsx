@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
+import { SiteFooter } from "../components/SiteFooter";
 import { flowList, getFlow } from "../data/flows";
 import type { FlowSession } from "../data/types";
 import styles from "./Hub.module.css";
@@ -83,14 +84,12 @@ export function Hub() {
         <span className={styles.legendItem}>
           <span className={`${styles.dot} ${styles.change}`} /> Take time to plan
         </span>
-        <span className={styles.legendItem}>
+        <span className={`${styles.legendItem} ${styles.exitLegend}`}>
           <span className={`${styles.dot} ${styles.exit}`} /> Ready for a change
         </span>
       </div>
 
-      <footer className={styles.footer}>
-        Based on Annie Duke&apos;s kill criteria framework · r/civilengineer_ph
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
