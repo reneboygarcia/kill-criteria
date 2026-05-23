@@ -26,10 +26,26 @@ Reference HTML decision trees live in `reference/` and were the source for flow 
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # tsc -b && vite build
+npm run dev         # http://localhost:5173
+npm run build       # tsc -b && vite build
 npm run preview
+npm test            # vitest run (unit + component tests)
+npm run test:watch  # vitest in watch mode
 ```
+
+## Testing instructions (Lens discipline)
+
+Adapted from the Lens repo testing standards:
+
+- Default to **TDD**: write or update tests before and alongside significant behavior changes.
+- Use **Vitest** and **Testing Library** for unit and component tests (`npm test` or `npx vitest run path/to/file.test.ts`).
+- Co-locate tests in `__tests__/` folders next to the code they cover.
+- When changing behavior, update existing tests first, then add new ones for edge cases.
+- If a test expectation is correct, fix production code — only change tests when the expectation itself is wrong.
+- Do not merge changes that break tests, TypeScript, or the production build.
+- **Security-sensitive changes** (headers, session storage, routing allowlists) must include or update tests in `src/config/__tests__/` or `src/lib/__tests__/`.
+- Keep `vercel.json` header values in sync with `src/config/security-headers.ts` — `vercel-config.test.ts` enforces parity.
+
 
 ## Architecture
 
@@ -44,7 +60,9 @@ When adding or editing flow content, update the TypeScript data files — not th
 
 ```
 src/
+  config/         Site config and security headers
   data/           Flow definitions and shared types
+  lib/            Shared utilities (e.g. flow session persistence)
   routes/         Hub (landing) and Flow (wizard)
   components/     UI: QuestionCard, OutcomeCard, ChoiceButtons, etc.
   hooks/          useFlowState, useReducedMotion
@@ -58,7 +76,6 @@ reference/        Source HTML decision trees
 - Use exhaustive switch handling for TypeScript unions and enums.
 - Colocate component styles as `*.module.css` next to the component.
 - Prefer minimal, focused diffs. Match existing naming and patterns.
-- Do not add tests, docs, or abstractions unless requested or clearly needed.
 - Only create git commits when explicitly asked.
 
 ## Commits
