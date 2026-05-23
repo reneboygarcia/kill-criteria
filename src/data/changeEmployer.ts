@@ -44,7 +44,7 @@ export const changeEmployerFlow: FlowDefinition = {
   title: "Should I change employer or niche?",
   subtitle:
     "For engineers who have already tried once — is it the employer or the field? · r/civilengineer_ph",
-  accent: "#7b9eb8",
+  accent: "#818cf8",
   startNodeId: "start",
   nodes: {
     start: {

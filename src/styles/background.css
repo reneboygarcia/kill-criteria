@@ -76,7 +76,7 @@ body::before {
     pointer-events: none;
     z-index: 0;
     opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M0 60h120M60 0v120' stroke='%23669df6' stroke-width='0.5'/%3E%3Ccircle cx='60' cy='60' r='18' fill='none' stroke='%237b9eb8' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M0 60h120M60 0v120' stroke='%236366f1' stroke-width='0.5'/%3E%3Ccircle cx='60' cy='60' r='18' fill='none' stroke='%234f46e5' stroke-width='0.5'/%3E%3C/svg%3E");
     background-size: 120px 120px;
   }
 }

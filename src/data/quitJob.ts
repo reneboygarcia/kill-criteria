@@ -7,7 +7,7 @@ export const quitJobFlow: FlowDefinition = {
   title: "Should I quit my current job?",
   subtitle:
     "For fresh grads, mid-level, and senior civil engineers in the Philippines · r/civilengineer_ph",
-  accent: "#669df6",
+  accent: "#6366f1",
   startNodeId: "start",
   nodes: {
     start: {

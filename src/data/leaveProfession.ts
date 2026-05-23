@@ -80,7 +80,7 @@ export const leaveProfessionFlow: FlowDefinition = {
   tag: "Kill Criteria — File 3 of 3",
   title: "Should I leave civil engineering entirely?",
   subtitle: "The last gate — OFW, pivot, or a clean exit · r/civilengineer_ph",
-  accent: "#c48b9f",
+  accent: "#4f46e5",
   startNodeId: "start",
   nodes: {
     start: {

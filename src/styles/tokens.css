@@ -23,9 +23,9 @@
   --plan-soft: #e8f0fe;
   --plan-text: #1a73e8;
 
-  --move: #e8938a;
-  --move-soft: #fce8e6;
-  --move-text: #b3261e;
+  --move: #6366f1;
+  --move-soft: #eef2ff;
+  --move-text: #4338ca;
 
   --success: var(--stay);
   --success-soft: var(--stay-soft);
@@ -41,8 +41,10 @@
 
   --accent-flow-1: #669df6;
   --accent-flow-2: #7b9eb8;
-  --accent-flow-3: #c48b9f;
+  --accent-flow-3: #818cf8;
   --accent: var(--accent-flow-1);
+  --fieldnotes-accent: #0d9488;
+  --progress: #7b9eb8;
 
   --text-sm: 14px;
   --text-base: 17px;

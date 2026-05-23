@@ -67,7 +67,7 @@
 
 .progressTrack {
   height: 6px;
-  background: var(--border-soft);
+  background: color-mix(in srgb, var(--progress) 14%, var(--border-soft));
   border-radius: var(--radius-pill);
   margin-top: 24px;
   overflow: hidden;
@@ -75,7 +75,7 @@
 
 .progressFill {
   height: 100%;
-  background: var(--flow-accent, var(--accent));
+  background: var(--progress);
   border-radius: var(--radius-pill);
   transition: width var(--duration-layout) var(--ease-spring);
   transform-origin: left center;
